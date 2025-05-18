@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kingston Demons</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Kingston Demons</h1>
+
+<!-- Add links to other repositories -->
+<ul class="nav-list">
+
+  <li><a href="https://mariebridgwood.github.io/BB1/" class="active">17 May 2025</a></li>
+
+</ul>
+
+
+
+  <div id="gallery" class="gallery"></div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" style="display:none;">
+    <span class="close">&times;</span>
+    <img src="" alt="Enlarged photo">
+    <button class="prev" onclick="changeImage(-1)">&#10094;</button>
+    <button class="next" onclick="changeImage(1)">&#10095;</button>
+  </div>
+
+  <script>
+    const imageList = [
+  "DSC_0292.JPG", "DSC_0293.JPG", "DSC_0297.JPG", "DSC_0299.JPG", "DSC_0302.JPG",
+  "DSC_0304.JPG", "DSC_0307.JPG", "DSC_0310.JPG", "DSC_0314.JPG", "DSC_0315.JPG",
+  "DSC_0318.JPG", "DSC_0330.JPG", "DSC_0331.JPG", "DSC_0335.JPG", "DSC_0337.JPG",
+  "DSC_0341.JPG", "DSC_0342.JPG", "DSC_0346.JPG", "DSC_0361.JPG", "DSC_0362.JPG",
+  "DSC_0364.JPG", "DSC_0368.JPG", "DSC_0374.JPG", "DSC_0376.JPG", "DSC_0377.JPG",
+  "DSC_0378.JPG", "DSC_0382.JPG", "DSC_0387.JPG", "DSC_0393.JPG", "DSC_0397.JPG",
+  "DSC_0402.JPG", "DSC_0404.JPG", "DSC_0407.JPG"
+    ];
+
+    const gallery = document.getElementById("gallery");
+    let currentImageIndex = 0;
+
+    // Dynamically add images
+    imageList.forEach((filename, index) => {
+      const photoDiv = document.createElement('div');
+      photoDiv.className = 'photo';
+      photoDiv.innerHTML = `
+        <img src="images/${filename}" alt="${filename}" data-index="${index}">
+        <a href="images/${filename}" download>Download</a>
+      `;
+      gallery.appendChild(photoDiv);
+    });
+
+    // Lightbox elements
+    const lightbox = document.querySelector('.lightbox');
+    const lightboxImage = document.querySelector('.lightbox img');
+    const closeBtn = document.querySelector('.close');
+
+    // Toggle zoom on click inside the lightbox image
+lightboxImage.addEventListener('click', (e) => {
+  e.stopPropagation(); // Prevent closing lightbox when clicking image
+  lightboxImage.classList.toggle('zoomed');
+});
+
+
+    // Add event listeners AFTER adding images
+    const thumbnails = document.querySelectorAll('.gallery img');
+
+    function openLightbox(event) {
+      event.preventDefault();
+      currentImageIndex = Number(event.target.dataset.index);
+      updateLightboxImage();
+      lightbox.style.display = 'flex';
+    }
+
+    function updateLightboxImage() {
+      lightboxImage.src = `images/${imageList[currentImageIndex]}`;
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+    }
+
+    function changeImage(direction) {
+      currentImageIndex += direction;
+      if (currentImageIndex < 0) {
+        currentImageIndex = imageList.length - 1;
+      } else if (currentImageIndex >= imageList.length) {
+        currentImageIndex = 0;
+      }
+      updateLightboxImage();
+    }
+
+    // Attach click events
+    thumbnails.forEach(thumbnail => {
+      thumbnail.addEventListener('click', openLightbox);
+    });
+
+    // Close lightbox when clicking outside the image or on close button
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox || e.target === closeBtn) {
+        closeLightbox();
+      }
+    });
+
+  </script>
+
+</body>
+</html>
